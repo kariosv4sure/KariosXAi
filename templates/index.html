@@ -1,0 +1,46 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KARIOS EXAM GENIUS</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body class="bg-gray-950 text-white font-sans min-h-screen flex items-center justify-center p-4">
+
+  <div class="w-full max-w-3xl bg-gray-900 rounded-xl p-8 shadow-2xl border border-yellow-400 animate-fadeIn">
+
+    <h1 class="text-4xl font-bold text-center text-yellow-400 glow mb-6">
+      KARIOS EXAM GENIUS 🧠📘
+    </h1>
+
+    <form method="POST" class="space-y-4">
+      <textarea name="question" rows="5" class="w-full p-4 text-black rounded-lg text-lg focus:outline-none" placeholder="Ask your Math or English question..."></textarea>
+      <button type="submit" class="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-6 rounded w-full transition duration-200">
+        🔍 Get Answer
+      </button>
+    </form>
+
+    {% if response %}
+    <div class="mt-6 bg-gray-800 p-6 rounded-lg border-l-4 border-yellow-400 ai-response animate-fadeIn">
+      <h2 class="text-xl font-semibold mb-3 text-green-400">✅ AI Response:</h2>
+      <p class="whitespace-pre-line text-lg">{{ response }}</p>
+    </div>
+    {% endif %}
+
+    <footer class="text-center mt-8 text-sm text-gray-500">
+      &copy; 2025 KARIOS LABS. Built for learning excellence 🚀
+    </footer>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="{{ url_for('static', filename='main.js') }}"></script>
+</body>
+</html>
+
