@@ -4,13 +4,47 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="google-site-verification" content="n0F9GLK2RH4uO8h-gxOcydonCoG-_vI0p9RkkzRV_4E" />
-  <title>KARIOS EXAM GENIUS</title>
+  <title>KARIOS EXAM GENIUS | AI Exam Helper for Maths & English WAEC/NECO</title>
 
-  <!-- Tailwind CDN -->
+  <!-- SEO & Social Meta -->
+  <meta name="description" content="Karios Exam Genius is your AI-powered exam assistant for Maths and English..." />
+  <meta name="keywords" content="AI exam assistant, Maths help, English help, WAEC solutions, NECO answers, secondary school exam helper, Nigeria students, Karios Exam Genius, AI tutor online, step-by-step exam guide" />
+  <meta name="author" content="Ifeanyichukwu Collins (Karios Vantari)" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://kariosxai.onrender.com/" />
+
+  <!-- Open Graph & Twitter -->
+  <meta property="og:title" content="Karios Exam Genius – AI Maths & English Exam Helper" />
+  <meta property="og:description" content="Free AI tutor providing WAEC and NECO exam guidance..." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://kariosxai.onrender.com/" />
+  <meta property="og:image" content="https://kariosxai.onrender.com/static/images/og-image.png" />
+  <meta property="og:locale" content="en_US" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Karios Exam Genius – AI Exam Helper" />
+  <meta name="twitter:description" content="AI-powered Maths & English exam help for WAEC/NECO students..." />
+  <meta name="twitter:image" content="https://kariosxai.onrender.com/static/images/twitter-card.png" />
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "EducationalOrganization",
+    "name": "Karios Exam Genius",
+    "url": "https://kariosxai.onrender.com/",
+    "logo": "https://kariosxai.onrender.com/static/images/logo.png",
+    "description": "AI-powered exam helper for Maths & English providing step-by-step solutions and exam guidance for secondary school students in Nigeria.",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Nigeria"
+    }
+  }
+  </script>
+
+  <!-- Tailwind & Fonts -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Custom CSS -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body class="bg-gray-950 text-white font-sans min-h-screen flex items-center justify-center p-4">
@@ -18,9 +52,8 @@
   <div class="w-full max-w-3xl bg-gray-900 rounded-xl p-8 shadow-2xl border border-yellow-400 animate-fadeIn">
 
     <h1 class="text-4xl font-bold text-center text-yellow-400 glow mb-6">
-      KARIOS EXAM GENIUS 🧠📘
+      KARIOS EXAM GENIUS 📘   
     </h1>
-
     <form method="POST" class="space-y-4">
       <textarea name="question" rows="5" class="w-full p-4 text-black rounded-lg text-lg focus:outline-none" placeholder="Ask your Math or English question..."></textarea>
       <button type="submit" class="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-6 rounded w-full transition duration-200">
@@ -28,10 +61,16 @@
       </button>
     </form>
 
-    {% if response %}
+    {% if short_response %}
     <div class="mt-6 bg-gray-800 p-6 rounded-lg border-l-4 border-yellow-400 ai-response animate-fadeIn">
       <h2 class="text-xl font-semibold mb-3 text-green-400">✅ AI Response:</h2>
-      <p class="whitespace-pre-line text-lg">{{ response }}</p>
+      <p class="whitespace-pre-line text-lg" id="short-response">{{ short_response }}</p>
+      {% if full_response %}
+      <p class="whitespace-pre-line text-lg hidden" id="full-response">{{ full_response }}</p>
+      <button id="read-more-btn" class="mt-3 bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 px-4 rounded transition duration-200">
+        Read More
+      </button>
+      {% endif %}
     </div>
     {% endif %}
 
@@ -42,6 +81,18 @@
 
   <!-- JavaScript -->
   <script src="{{ url_for('static', filename='main.js') }}"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const readMoreBtn = document.getElementById("read-more-btn");
+      const fullResponse = document.getElementById("full-response");
+
+      if (readMoreBtn && fullResponse) {
+        readMoreBtn.addEventListener("click", () => {
+          fullResponse.classList.toggle("hidden");
+          readMoreBtn.textContent = fullResponse.classList.contains("hidden") ? "Read More" : "Read Less";
+        });
+      }
+    });
+  </script>
 </body>
 </html>
-

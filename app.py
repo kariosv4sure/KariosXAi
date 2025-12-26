@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_from_directory
 import requests
 import os
 from dotenv import load_dotenv
@@ -30,21 +30,19 @@ def call_groq_api(prompt, model="llama-3.1-70b-versatile"):
     }
 
     res = requests.post(api_url, headers=headers, json=data)
-
-    # Raise error if API call fails
     res.raise_for_status()
     return res.json()["choices"][0]["message"]["content"].strip()
 
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    response = ""
+    short_response = ""
+    full_response = ""
 
     if request.method == 'POST':
         user_question = request.form.get('question', '').strip()
 
         if user_question:
-            # ✍️ AI prompt
             prompt = f"""
 You are KARIOS EXAM GENIUS — an AI tutor that ONLY answers Maths and English exam-style questions with clarity and helpful explanation.
 
@@ -54,20 +52,38 @@ Here is the user's question:
 Now, solve it or answer it as clearly as possible. If it is a writing task (like an essay or formal letter), write at least 450 words.
 """
             try:
-                # ✅ Try main model first
-                response = call_groq_api(prompt, model="llama-3.1-70b-versatile")
+                response_full = call_groq_api(prompt, model="llama-3.1-70b-versatile")
             except Exception as e:
                 try:
-                    # 🔄 Fallback to smaller/faster model
-                    response = call_groq_api(prompt, model="llama-3.1-8b-instant")
+                    response_full = call_groq_api(prompt, model="llama-3.1-8b-instant")
                 except Exception as e2:
-                    # ⚠️ If both fail, show error details
-                    response = f"⚠️ API Error: {str(e2)}"
-        else:
-            response = "❗ Please enter a question."
+                    response_full = f"⚠️ API Error: {str(e2)}"
 
-    return render_template("index.html", response=response)
+            # ✅ Automatic Read More logic
+            MAX_PREVIEW_CHARS = 800  # characters to show before "Read More"
+            if len(response_full) > MAX_PREVIEW_CHARS:
+                short_response = response_full[:MAX_PREVIEW_CHARS] + "..."
+                full_response = response_full[MAX_PREVIEW_CHARS:]
+            else:
+                short_response = response_full
+                full_response = ""
+        else:
+            short_response = full_response = "❗ Please enter a question."
+
+    return render_template("index.html", short_response=short_response, full_response=full_response)
+
+
+# ✅ Sitemap route
+@app.route('/sitemap.xml')
+def sitemap():
+    return send_from_directory('static', 'sitemap.xml')
+
+
+# ✅ Robots route
+@app.route('/robots.txt')
+def robots():
+    return send_from_directory('static', 'robots.txt')
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
