@@ -72,17 +72,13 @@ Now, solve it or answer it as clearly as possible. If it is a writing task (like
 
     return render_template("index.html", short_response=short_response, full_response=full_response)
 
-
-# ✅ Sitemap route
-@app.route('/sitemap.xml')
-def sitemap():
-    return send_from_directory('static', 'sitemap.xml')
-
-
-# ✅ Robots route
 @app.route('/robots.txt')
 def robots():
-    return send_from_directory('static', 'robots.txt')
+    return send_from_directory('.', 'robots.txt')
+
+@app.route('/sitemap.xml')
+def sitemap():
+    return send_from_directory('.', 'sitemap.xml')
 
 
 if __name__ == '__main__':
