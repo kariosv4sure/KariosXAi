@@ -3,6 +3,8 @@ import requests
 import os
 from dotenv import load_dotenv
 
+# Hehehe 
+
 # ✅ Load environment variables
 load_dotenv()
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
